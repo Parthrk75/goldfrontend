@@ -56,7 +56,7 @@ export default function LivePriceDemo() {
   const isPositive = priceData && previousPrice !== null && priceData.price >= previousPrice;
 
   return (
-    <div className="space-y-12 px-12 md:px-20">
+    <div className="space-y-12 px-12 md:px-20 mt-8">
       <div className="bg-gray-800 rounded-lg p-8 shadow-xl">
         <h2 className="text-2xl font-bold mb-8 text-gray-200">Live Gold Price</h2>
         <div className="flex items-center justify-between">
@@ -66,8 +66,19 @@ export default function LivePriceDemo() {
               ${priceData.price.toFixed(2)}
             </p>
             <p className="text-sm text-gray-400 mt-2">
-              New York Time: <span className="text-gray-300">{priceData.newYorkTime}</span>
-            </p>
+  New York Time:{" "}
+  <span className="text-gray-300">
+    {priceData.newYorkTime ? (
+      <>
+        <span>{new Date(priceData.newYorkTime).toLocaleDateString()}</span> -{" "}
+        <span>{new Date(priceData.newYorkTime).toLocaleTimeString()}</span>
+      </>
+    ) : (
+      "Loading..."
+    )}
+  </span>
+</p>
+
           </div>
           <div className={`flex items-center ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
             {isPositive ? <TrendingUp className="mr-4" /> : <TrendingDown className="mr-4" />}
