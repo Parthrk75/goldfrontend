@@ -189,7 +189,7 @@ const GoldChart = () => {
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg p-6 shadow-xl">
+    <div className="bg-gray-800 rounded-lg p-6 shadow-xl mt-8" >
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-white">Gold Price Chart</h2>
         <div className="flex gap-2">

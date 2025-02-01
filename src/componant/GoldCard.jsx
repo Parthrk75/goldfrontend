@@ -16,7 +16,7 @@ export default function LivePriceDemo() {
         return response.json();
       })
       .then((data) => {
-        setPreviousPrice(priceData?.price || null);
+        setPreviousPrice(priceData?.price || null); // This will correctly set the previousPrice
         setPriceData({
           price: data.price,
           timestamp: new Date(data.updatedAt).toLocaleString(),
@@ -34,7 +34,7 @@ export default function LivePriceDemo() {
     fetchPriceData();
     const interval = setInterval(fetchPriceData, 60000); // Refresh every minute
     return () => clearInterval(interval);
-  }, []);
+  }, [priceData]); // Add priceData to the dependency array to fetch new data on price change
 
   if (loading) {
     return (
@@ -56,43 +56,9 @@ export default function LivePriceDemo() {
   const isPositive = priceData && previousPrice !== null && priceData.price >= previousPrice;
 
   return (
-    <div className="space-y-12 px-12 md:px-20 mt-8">
-      <div className="bg-gray-800 rounded-lg p-8 shadow-xl">
-        <h2 className="text-2xl font-bold mb-8 text-gray-200">Live Gold Price</h2>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-gray-300">Current Price</p>
-            <p className="text-4xl font-bold text-yellow-400">
-              ${priceData.price.toFixed(2)}
-            </p>
-            <p className="text-sm text-gray-400 mt-2">
-  New York Time:{" "}
-  <span className="text-gray-300">
-    {priceData.newYorkTime ? (
-      <>
-        <span>{new Date(priceData.newYorkTime).toLocaleDateString()}</span> -{" "}
-        <span>{new Date(priceData.newYorkTime).toLocaleTimeString()}</span>
-      </>
-    ) : (
-      "Loading..."
-    )}
-  </span>
-</p>
-
-          </div>
-          <div className={`flex items-center ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
-            {isPositive ? <TrendingUp className="mr-4" /> : <TrendingDown className="mr-4" />}
-            <span>{previousPrice !== null ? ((priceData.price - previousPrice) / previousPrice * 100).toFixed(2) : '0.00'}%</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-        <PriceCard 
-          title="24K Gold" 
-          price={priceData.price} 
-          change={previousPrice !== null ? ((priceData.price - previousPrice) / previousPrice * 100) : 0} 
-        />
+    <div className="space-y-12 px-8 sm:px-12 md:px-20 mt-10">
+      {/* Centered Grid for Gold Prices */}
+      <div className="flex flex-wrap justify-center gap-12 md:gap-16">
         <PriceCard 
           title="22K Gold" 
           price={priceData.price * 0.916} 
@@ -108,15 +74,11 @@ export default function LivePriceDemo() {
   );
 }
 
-function PriceCard({ 
-  title, 
-  price, 
-  change 
-}) {
+function PriceCard({ title, price, change }) {
   const isPositive = change >= 0;
 
   return (
-    <div className="bg-gray-800 rounded-lg p-8 shadow-lg">
+    <div className="bg-gray-800 rounded-lg p-8 shadow-lg w-full sm:w-[300px] md:w-[350px] lg:w-[400px]">
       <h3 className="text-lg font-semibold mb-6 text-gray-300">{title}</h3>
       <div className="flex items-center justify-between">
         <p className="text-2xl font-bold text-gray-200">${price.toFixed(2)}</p>

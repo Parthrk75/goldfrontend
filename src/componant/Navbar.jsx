@@ -36,16 +36,16 @@ export default function Navbar() {
             </button>
 
             {/* Desktop Navigation on the right */}
-            <div className="hidden md:flex md:items-center md:space-x-8 ml-auto">
+            <div className="hidden md:flex md:items-center md:space-x-12 ml-auto"> {/* Increased space-x-8 to space-x-12 */}
               {navLinks.map(({ path, label, icon: Icon }) => (
                 <Link
                   key={path}
                   to={path}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  className={`flex items-center space-x-2 px-5 py-3 rounded-md text-sm font-medium transition-colors duration-200 ${
                     isActive(path)
                       ? "text-yellow-400 bg-gray-700"
                       : "text-gray-300 hover:text-yellow-400 hover:bg-gray-700"
-                  }`}
+                  }`} /* Increased padding px-3 to px-5 and py-2 to py-3 */
                 >
                   <Icon size={18} />
                   <span>{label}</span>
@@ -63,11 +63,11 @@ export default function Navbar() {
             <Link
               key={path}
               to={path}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium ${
+              className={`flex items-center space-x-2 px-5 py-3 rounded-md text-base font-medium ${
                 isActive(path)
                   ? "text-yellow-400 bg-gray-700"
                   : "text-gray-300 hover:text-yellow-400 hover:bg-gray-700"
-              }`}
+              }`} /* Increased padding px-3 to px-5 and py-2 to py-3 */
               onClick={() => setIsMenuOpen(false)}
             >
               <Icon size={18} />
