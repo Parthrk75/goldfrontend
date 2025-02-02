@@ -1,53 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-const LastEntries = () => {
-  const [entries, setEntries] = useState([]);
+export default function LastEntries() {
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetching data from the backend
-    fetch('https://goldbackend-vpte.onrender.com/last-entries')
-      .then(response => response.json())
-      .then(data => {
-        setEntries(data);
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/prices");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        setError(error.message);
+      } finally {
         setLoading(false);
-      })
-      .catch(err => {
-        setError('Error fetching data');
-        setLoading(false);
-      });
+      }
+    };
+    
+    fetchData();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div>
-      <h1>Last Gold Price Entries</h1>
+      <h2>Gold Prices</h2>
       <table>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Close Price</th>
+            <th>DateTime</th>
+            <th>Gold Price (USD)</th>
           </tr>
         </thead>
         <tbody>
-          {entries.map((entry, index) => (
+          {data.map((row, index) => (
             <tr key={index}>
-              <td>{entry.Date}</td>
-              <td>{entry.Close}</td>
+              <td>{row[0]}</td>
+              <td>{row[1]}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-};
-
-export default LastEntries;
+}

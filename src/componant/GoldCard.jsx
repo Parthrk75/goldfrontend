@@ -56,7 +56,7 @@ export default function LivePriceDemo() {
   const isPositive = priceData && previousPrice !== null && priceData.price >= previousPrice;
 
   return (
-    <div className="space-y-12 px-8 sm:px-12 md:px-20 mt-10">
+    <div className="space-y-12 px-8 sm:px-12 md:px-20 mt-2">
       {/* Centered Grid for Gold Prices */}
       <div className="flex flex-wrap justify-center gap-12 md:gap-16">
         <PriceCard 

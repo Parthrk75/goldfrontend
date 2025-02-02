@@ -11,10 +11,10 @@ function App() {
     <div className="App">
       <Navbar />
       <GoldPrice/>
+      {/* <LastEntries/> */}
       <GoldCard />
       {/* <PriceTable/> */}
       <GoldChart/>
-      {/* <LastEntries/> */}
     </div>
   );
 }
