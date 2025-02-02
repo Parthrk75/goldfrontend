@@ -46,7 +46,7 @@ const GoldChart = () => {
       let apiUrl = '';
       
       if (selectedTimeframe === '7d') {
-        apiUrl = 'https://goldbackend-vpte.onrender.com/last-entries?numEntries=7';
+        apiUrl = 'https://goldbackend-vpte.onrender.com/last-entries';
       } else if (selectedTimeframe === '30d') {
         apiUrl = 'https://goldbackend-vpte.onrender.com/last-entries?numEntries=30';
       }else if (selectedTimeframe === '60d') {
