@@ -23,7 +23,7 @@ export default function GoldPriceDashboard() {
   const fetchLivePrice = async () => {
     try {
       const response = await fetch(
-        "https://goldbackend-vpte.onrender.com/live"
+        "https://goldbackend-f70034eb64ad.herokuapp.com/live"
       );
       const data = await response.json();
       setPreviousPrice(livePrice);

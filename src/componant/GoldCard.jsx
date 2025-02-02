@@ -8,7 +8,7 @@ export default function LivePriceDemo() {
   const [error, setError] = useState(null);
 
   const fetchPriceData = () => {
-    fetch('https://goldbackend-vpte.onrender.com/live')
+    fetch('https://goldbackend-f70034eb64ad.herokuapp.com/live')
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch data');
