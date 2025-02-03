@@ -1,18 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { TrendingUp, LineChart, Newspaper, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-
-  const isActive = (path) => location.pathname === path;
-
-  const navLinks = [
-    { path: "/live-price", label: "Live Price", icon: TrendingUp },
-    { path: "/gold-chart", label: "Gold Chart", icon: LineChart },
-    { path: "/news", label: "News", icon: Newspaper },
-  ];
 
   return (
     <div className="sticky top-0 z-50">
@@ -34,48 +26,9 @@ export default function Navbar() {
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-
-            {/* Desktop Navigation on the right */}
-            <div className="hidden md:flex md:items-center md:space-x-12 ml-auto"> {/* Increased space-x-8 to space-x-12 */}
-              {navLinks.map(({ path, label, icon: Icon }) => (
-                <Link
-                  key={path}
-                  to={path}
-                  className={`flex items-center space-x-2 px-5 py-3 rounded-md text-sm font-medium transition-colors duration-200 ${
-                    isActive(path)
-                      ? "text-yellow-400 bg-gray-700"
-                      : "text-gray-300 hover:text-yellow-400 hover:bg-gray-700"
-                  }`} /* Increased padding px-3 to px-5 and py-2 to py-3 */
-                >
-                  <Icon size={18} />
-                  <span>{label}</span>
-                </Link>
-              ))}
-            </div>
           </div>
         </div>
       </nav>
-
-      {/* Mobile Navigation */}
-      <div className={`md:hidden ${isMenuOpen ? "block" : "hidden"}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-800">
-          {navLinks.map(({ path, label, icon: Icon }) => (
-            <Link
-              key={path}
-              to={path}
-              className={`flex items-center space-x-2 px-5 py-3 rounded-md text-base font-medium ${
-                isActive(path)
-                  ? "text-yellow-400 bg-gray-700"
-                  : "text-gray-300 hover:text-yellow-400 hover:bg-gray-700"
-              }`} /* Increased padding px-3 to px-5 and py-2 to py-3 */
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <Icon size={18} />
-              <span>{label}</span>
-            </Link>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
-export default function LivePriceDemo() {
+export default function LiveGoldPrices() {
   const [priceData, setPriceData] = useState(null);
   const [previousPrice, setPreviousPrice] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -16,11 +16,10 @@ export default function LivePriceDemo() {
         return response.json();
       })
       .then((data) => {
-        setPreviousPrice(priceData?.price || null); // This will correctly set the previousPrice
+        setPreviousPrice(priceData?.price || null);
         setPriceData({
           price: data.price,
-          timestamp: new Date(data.updatedAt).toLocaleString(),
-          newYorkTime: data.newYorkTime,
+          newYorkTime: new Date(data.newYorkTime).toLocaleString(),
         });
         setLoading(false);
       })
@@ -32,9 +31,9 @@ export default function LivePriceDemo() {
 
   useEffect(() => {
     fetchPriceData();
-    const interval = setInterval(fetchPriceData, 60000); // Refresh every minute
+    const interval = setInterval(fetchPriceData, 60000);
     return () => clearInterval(interval);
-  }, [priceData]); // Add priceData to the dependency array to fetch new data on price change
+  }, [priceData]);
 
   if (loading) {
     return (
@@ -53,64 +52,28 @@ export default function LivePriceDemo() {
     );
   }
 
-  const isPositive = priceData && previousPrice !== null && priceData.price >= previousPrice;
-
   return (
-    <div className="space-y-12 px-8 sm:px-12 md:px-20 mt-2">
-      {/* Centered Grid for Gold Prices */}
-      <div className="flex flex-wrap justify-center gap-12 md:gap-16">
-        <PriceCard 
-          title="22K Gold" 
-          price={priceData.price * 0.916} 
-          change={previousPrice !== null ? ((priceData.price - previousPrice) / previousPrice * 100) : 0} 
-        />
-        <PriceCard 
-          title="18K Gold" 
-          price={priceData.price * 0.75} 
-          change={previousPrice !== null ? ((priceData.price - previousPrice) / previousPrice * 100) : 0} 
-        />
-      </div>
+    <div className="flex flex-wrap justify-center gap-6 md:gap-12 px-4 md:px-12 mt-6">
+      <PriceCard title="24K Gold" price={priceData.price} previousPrice={previousPrice} newYorkTime={priceData.newYorkTime} />
+      <PriceCard title="22K Gold" price={priceData.price * 0.916} previousPrice={previousPrice * 0.916} newYorkTime={priceData.newYorkTime} />
+      <PriceCard title="18K Gold" price={priceData.price * 0.75} previousPrice={previousPrice * 0.75} newYorkTime={priceData.newYorkTime} />
     </div>
   );
 }
 
-function PriceCard({ title, price, change }) {
-  const isPositive = change >= 0;
+function PriceCard({ title, price, previousPrice, newYorkTime }) {
+  const isPositive = previousPrice !== null && price >= previousPrice;
+  const change = previousPrice !== null ? ((price - previousPrice) / previousPrice) * 100 : 0;
 
   return (
-    <div className="bg-gray-800 rounded-lg p-8 shadow-lg w-full sm:w-[300px] md:w-[350px] lg:w-[400px]">
-      <h3 className="text-lg font-semibold mb-6 text-gray-300">{title}</h3>
-      <div className="flex items-center justify-between">
-        <p className="text-2xl font-bold text-gray-200">${price.toFixed(2)}</p>
-        <div className={`flex items-center ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
-          {isPositive ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
-          <span className="ml-4">{change.toFixed(2)}%</span>
-        </div>
+    <div className="bg-gray-800 rounded-lg p-6 shadow-lg w-[300px] md:w-[350px] lg:w-[400px]">
+      <h3 className="text-lg font-semibold mb-2 text-gray-300">{title}</h3>
+      <p className="text-2xl font-bold text-yellow-500">${price.toFixed(2)}</p>
+      <p className="text-sm text-gray-400 mt-1">New York Time: {newYorkTime}</p>
+      <div className={`flex items-center mt-3 ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+        {isPositive ? <TrendingUp size={20} className="mr-2" /> : <TrendingDown size={20} className="mr-2" />}
+        <span>{change.toFixed(2)}%</span>
       </div>
-    </div>
-  );
-}
-
-function PriceComparisonTable({ comparisons }) {
-  return (
-    <div className="bg-gray-800 rounded-lg p-12 shadow-xl">
-      <h3 className="text-lg font-semibold mb-8 text-gray-300">Price Comparison</h3>
-      <table className="w-full text-left">
-        <thead>
-          <tr>
-            <th className="pb-6 border-b border-gray-600 text-gray-400">Platform</th>
-            <th className="pb-6 border-b border-gray-600 text-gray-400">Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {comparisons.map((comp, idx) => (
-            <tr key={idx}>
-              <td className="py-6 text-gray-400">{comp.platform}</td>
-              <td className="py-6 text-yellow-400">${comp.price.toFixed(2)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }
