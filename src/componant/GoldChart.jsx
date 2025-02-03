@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
+import { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
   Filler,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(
   CategoryScale,
@@ -24,23 +24,26 @@ ChartJS.register(
 );
 
 const formatDate = (dateString) => {
-  const [datePart, _timePart] = dateString.split(' ');
-  const [day, month, _year] = datePart.split('-');
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const [datePart, _timePart] = dateString.split(" ");
+  const [day, month, _year] = datePart.split("-");
+  const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  ];
   return `${months[parseInt(month, 10) - 1]} ${parseInt(day, 10)}`;
 };
 
 const GoldChart = () => {
   const [goldPrices, setGoldPrices] = useState([]);
-  const [selectedTimeframe, setSelectedTimeframe] = useState('7d');
+  const [selectedTimeframe, setSelectedTimeframe] = useState("7d");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchGoldPrices = async () => {
       setIsLoading(true);
       let apiUrl = `https://goldbackend-f70034eb64ad.herokuapp.com/last-entries`;
-      if (selectedTimeframe !== '7d') {
-        apiUrl += `?numEntries=${selectedTimeframe.replace('d', '')}`;
+      if (selectedTimeframe !== "7d") {
+        apiUrl += `?numEntries=${selectedTimeframe.replace("d", "")}`;
       }
 
       try {
@@ -48,12 +51,12 @@ const GoldChart = () => {
         const data = await response.json();
 
         if (!Array.isArray(data)) {
-          throw new Error('Invalid data format received');
+          throw new Error("Invalid data format received");
         }
 
         const parsedData = data.map((entry) => {
-          if (typeof entry === 'string') {
-            const [timestamp, open, high, low, close] = entry.split(',');
+          if (typeof entry === "string") {
+            const [timestamp, open, high, low, close] = entry.split(",");
             return {
               timestamp: timestamp.trim(),
               open: parseFloat(open),
@@ -74,7 +77,7 @@ const GoldChart = () => {
 
         setGoldPrices(parsedData);
       } catch (error) {
-        console.error('Error fetching gold prices:', error);
+        console.error("Error fetching gold prices:", error);
       } finally {
         setIsLoading(false);
       }
@@ -92,23 +95,23 @@ const GoldChart = () => {
   }
 
   const timeframes = [
-    { label: '7D', value: '7d' },
-    { label: '30D', value: '30d' },
-    { label: '60D', value: '60d' },
-    { label: '6M', value: '180d' },
-    { label: '1Y', value: '365d' },
-    { label: '5Y', value: '1825d' },
+    { label: "7D", value: "7d" },
+    { label: "30D", value: "30d" },
+    { label: "60D", value: "60d" },
+    { label: "6M", value: "180d" },
+    { label: "1Y", value: "365d" },
+    { label: "5Y", value: "1825d" },
   ];
 
   const chartData = {
-    labels: goldPrices.map(item => formatDate(item.timestamp)),
+    labels: goldPrices.map((item) => formatDate(item.timestamp)),
     datasets: [
       {
-        label: 'Gold Price (Close)',
-        data: goldPrices.map(item => item.close),
-        fill: 'start',
-        borderColor: 'rgb(234, 179, 8)',
-        backgroundColor: 'rgba(234, 179, 8, 0.1)',
+        label: "Gold Price (Close)",
+        data: goldPrices.map((item) => item.close),
+        fill: "start",
+        borderColor: "rgb(34, 197, 94)", // Change the line color to green
+        backgroundColor: "rgba(34, 197, 94, 0.1)", // Change the background color to light green
         borderWidth: 2,
         tension: 0.4,
         pointRadius: 4,
@@ -116,8 +119,32 @@ const GoldChart = () => {
     ],
   };
 
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false, // Ensures the chart adapts within the div
+    plugins: {
+      legend: {
+        labels: {
+          color: "#fff", // Keep the legend labels white
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "#fff", // Set the x-axis label color to white
+        },
+      },
+      y: {
+        ticks: {
+          color: "#fff", // Set the y-axis label color to white
+        },
+      },
+    },
+  };
+
   return (
-    <div className="bg-gray-800 rounded-lg p-6 shadow-xl mt-8">
+    <div className="bg-gray-800 rounded-lg p-6 shadow-xl mt-8 w-full max-w-7xl mx-auto"> {/* Increased width of the div */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-white">Gold Price Chart</h2>
         <div className="flex gap-2">
@@ -127,8 +154,8 @@ const GoldChart = () => {
               onClick={() => setSelectedTimeframe(value)}
               className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
                 selectedTimeframe === value
-                  ? 'bg-yellow-500 text-gray-900'
-                  : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                  ? "bg-yellow-500 text-gray-900"
+                  : "text-gray-400 hover:text-white hover:bg-gray-700"
               }`}
             >
               {label}
@@ -136,8 +163,8 @@ const GoldChart = () => {
           ))}
         </div>
       </div>
-      <div className="h-[400px]">
-        <Line data={chartData} />
+      <div className="relative h-[500px] w-full"> {/* Increased height for chart */}
+        <Line data={chartData} options={chartOptions} />
       </div>
     </div>
   );

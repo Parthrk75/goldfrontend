@@ -9,8 +9,9 @@ export default function GoldPriceDashboard() {
   const [error, setError] = useState(null);
 
   const livePriceUrl = "https://goldbackend-f70034eb64ad.herokuapp.com/live";
-  const historicalUrls = [30, 60, 90, 180, 365, 1825].map(
-    (days) => `https://goldbackend-f70034eb64ad.herokuapp.com/last-entries?numEntries=${days}`
+  const historicalUrls = [7, 30, 60, 90, 180, 365, 1825].map(
+    (days) =>
+      `https://goldbackend-f70034eb64ad.herokuapp.com/last-entries?numEntries=${days}`
   );
 
   // Fetch Live Price and New York Time
@@ -28,10 +29,12 @@ export default function GoldPriceDashboard() {
   // Fetch Historical Prices
   const fetchHistoricalPrices = async () => {
     try {
-      const results = await Promise.all(historicalUrls.map(url => fetch(url).then(res => res.json())));
+      const results = await Promise.all(
+        historicalUrls.map((url) => fetch(url).then((res) => res.json()))
+      );
       const priceMap = {};
-      
-      [30, 60, 90, 180, 365, 1825].forEach((days, index) => {
+
+      [7, 30, 60, 90, 180, 365, 1825].forEach((days, index) => {
         if (results[index] && results[index].length > 0) {
           priceMap[days] = parseFloat(results[index][0].Close);
         }
@@ -57,17 +60,17 @@ export default function GoldPriceDashboard() {
 
   return (
     <div className="container mx-auto p-6 flex flex-col items-center">
-      <div className="w-full md:w-3/4 lg:w-2/3 bg-gray-800 rounded-lg p-8 shadow-xl overflow-x-auto">
+      <div className="w-full md:w-3/4 lg:w-2/3 xl:w-4/5 bg-gray-800 rounded-lg p-8 shadow-xl overflow-x-auto">
         <h2 className="text-2xl font-bold text-white text-center mb-6">
           Gold Price Performance
         </h2>
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full text-left table-auto">
             <thead>
               <tr className="border-b border-gray-700">
-                <th className="py-3 text-white">Time Period</th>
-                <th className="py-3 text-right text-white">Price Diff</th>
-                <th className="py-3 text-right text-white">Change</th>
+                <th className="py-3 text-[#EAB308]">Time Period</th>
+                <th className="py-3 text-right text-[#EAB308]">Price Diff</th>
+                <th className="py-3 text-right text-[#EAB308]">Change</th>
               </tr>
             </thead>
             <tbody>
@@ -75,14 +78,29 @@ export default function GoldPriceDashboard() {
                 const diff = livePrice - oldPrice;
                 const percentageChange = ((diff / oldPrice) * 100).toFixed(2);
                 return (
-                  <tr key={days} className="border-b border-gray-700 last:border-0 hover:bg-gray-700/50">
+                  <tr
+                    key={days}
+                    className="border-b border-gray-700 last:border-0 hover:bg-gray-700/50"
+                  >
                     <td className="py-4 text-white">{getLabel(days)}</td>
-                    <td className={`text-right py-4 ${diff >= 0 ? "text-green-400" : "text-red-400"}`}>
+                    <td
+                      className={`text-right py-4 ${
+                        diff >= 0 ? "text-green-400" : "text-red-400"
+                      }`}
+                    >
                       ${Math.abs(diff).toFixed(2)}
                     </td>
-                    <td className={`text-right py-4 ${diff >= 0 ? "text-green-400" : "text-red-400"}`}>
+                    <td
+                      className={`text-right py-4 ${
+                        diff >= 0 ? "text-green-400" : "text-red-400"
+                      }`}
+                    >
                       <div className="flex items-center justify-end">
-                        {diff >= 0 ? <TrendingUp size={16} className="mr-1" /> : <TrendingDown size={16} className="mr-1" />}
+                        {diff >= 0 ? (
+                          <TrendingUp size={16} className="mr-1" />
+                        ) : (
+                          <TrendingDown size={16} className="mr-1" />
+                        )}
                         {percentageChange}%
                       </div>
                     </td>
@@ -100,6 +118,7 @@ export default function GoldPriceDashboard() {
 // Function to get readable time labels
 function getLabel(days) {
   const labels = {
+    7: "Last Week",
     30: "Last Month",
     60: "Last 2 Months",
     90: "Last 3 Months",
