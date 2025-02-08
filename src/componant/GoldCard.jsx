@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TrendingUp, TrendingDown, Sun, Moon } from "lucide-react";
+import {Sun, Moon } from "lucide-react";
 import GoldChart from "./GoldChart";
 
 const GoldPriceCard = ({ title, price }) => (
