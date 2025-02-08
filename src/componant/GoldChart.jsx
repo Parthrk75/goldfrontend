@@ -36,9 +36,9 @@ const filterDataPoints = (data, selectedTimeframe) => {
   if (selectedTimeframe === "30d") return data.slice(-30);
 
   let step = 1;
-  if (selectedTimeframe === "180d") step = 7; // Show weekly data
-  if (selectedTimeframe === "365d") step = 14; // Show bi-weekly data
-  if (selectedTimeframe === "1825d") step = 30; // Show monthly data
+  if (selectedTimeframe === "180d") step = 7;
+  if (selectedTimeframe === "365d") step = 14;
+  if (selectedTimeframe === "1825d") step = 30;
 
   return data.filter((_, index) => index % step === 0);
 };
@@ -121,11 +121,11 @@ const GoldChart = () => {
       {
         data: filteredData.map((item) => item.close),
         fill: "start",
-        borderColor: "rgb(34, 197, 94)", 
-        backgroundColor: "rgba(34, 197, 94, 0.1)", 
-        borderWidth: 2,
+        borderColor: "rgb(255, 215, 0)",
+        backgroundColor: "rgba(255, 215, 0, 0.2)",
+        borderWidth: 3,
         tension: 0.4,
-        pointRadius: 4,
+        pointRadius: 3,
       },
     ],
   };
@@ -134,7 +134,7 @@ const GoldChart = () => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: false }, // No legend
+      legend: { display: false },
     },
     scales: {
       x: {
@@ -162,18 +162,16 @@ const GoldChart = () => {
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg p-6 shadow-xl mt-8 mx-auto w-full max-w-7xl px-8 lg:px-12">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">Gold Price Chart</h2>
-        <div className="flex gap-2">
+    <div >
+      <div className="flex flex-wrap items-center justify-between mb-6">
+        <h2 className="text-xl md:text-2xl font-bold text-white">Gold Price Chart</h2>
+        <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
           {timeframes.map(({ label, value }) => (
             <button
               key={value}
               onClick={() => setSelectedTimeframe(value)}
               className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                selectedTimeframe === value
-                  ? "bg-yellow-500 text-gray-900"
-                  : "text-gray-400 hover:text-white hover:bg-gray-700"
+                selectedTimeframe === value ? "bg-yellow-500 text-gray-900" : "text-gray-400 hover:text-white hover:bg-gray-700"
               }`}
             >
               {label}
@@ -181,7 +179,7 @@ const GoldChart = () => {
           ))}
         </div>
       </div>
-      <div className="relative h-[500px] w-full">
+      <div className="relative h-72 sm:h-96 w-full">
         <Line data={chartData} options={chartOptions} />
       </div>
     </div>
