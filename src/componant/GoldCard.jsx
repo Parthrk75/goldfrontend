@@ -65,15 +65,7 @@ export default function GoldPriceDashboard() {
   return (
     <div className="min-h-screen p-6 bg-gray-900 text-white flex flex-col items-center">
       <div className="w-full max-w-screen-xl">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Gold Price Dashboard</h1>
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition"
-          >
-            {darkMode ? <Sun size={24} className="text-yellow-400" /> : <Moon size={24} className="text-white" />}
-          </button>
-        </div>
+        
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <GoldPriceCard title="24K Gold Price" price={livePrice} />
