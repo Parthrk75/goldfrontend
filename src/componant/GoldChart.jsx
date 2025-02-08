@@ -8,7 +8,6 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend,
   Filler,
 } from "chart.js";
 
@@ -19,18 +18,29 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend,
   Filler
 );
 
-const formatDate = (dateString) => {
-  const [datePart, _timePart] = dateString.split(" ");
-  const [day, month, _year] = datePart.split("-");
-  const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-  ];
-  return `${months[parseInt(month, 10) - 1]} ${parseInt(day, 10)}`;
+const formatDate = (dateString, selectedTimeframe) => {
+  const [datePart] = dateString.split(" ");
+  const [day, month, year] = datePart.split("-");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  return ["7d", "30d", "60d"].includes(selectedTimeframe)
+    ? `${parseInt(day, 10)} ${months[parseInt(month, 10) - 1]}`
+    : `${months[parseInt(month, 10) - 1]} ${year}`;
+};
+
+const filterDataPoints = (data, selectedTimeframe) => {
+  if (selectedTimeframe === "7d") return data.slice(-7);
+  if (selectedTimeframe === "30d") return data.slice(-30);
+
+  let step = 1;
+  if (selectedTimeframe === "180d") step = 7; // Show weekly data
+  if (selectedTimeframe === "365d") step = 14; // Show bi-weekly data
+  if (selectedTimeframe === "1825d") step = 30; // Show monthly data
+
+  return data.filter((_, index) => index % step === 0);
 };
 
 const GoldChart = () => {
@@ -96,22 +106,23 @@ const GoldChart = () => {
 
   const timeframes = [
     { label: "7D", value: "7d" },
-    { label: "30D", value: "30d" },
-    { label: "60D", value: "60d" },
+    { label: "1M", value: "30d" },
+    { label: "2M", value: "60d" },
     { label: "6M", value: "180d" },
     { label: "1Y", value: "365d" },
     { label: "5Y", value: "1825d" },
   ];
 
+  const filteredData = filterDataPoints(goldPrices, selectedTimeframe);
+
   const chartData = {
-    labels: goldPrices.map((item) => formatDate(item.timestamp)),
+    labels: filteredData.map((item) => formatDate(item.timestamp, selectedTimeframe)),
     datasets: [
       {
-        label: "Gold Price (Close)",
-        data: goldPrices.map((item) => item.close),
+        data: filteredData.map((item) => item.close),
         fill: "start",
-        borderColor: "rgb(34, 197, 94)", // Change the line color to green
-        backgroundColor: "rgba(34, 197, 94, 0.1)", // Change the background color to light green
+        borderColor: "rgb(34, 197, 94)", 
+        backgroundColor: "rgba(34, 197, 94, 0.1)", 
         borderWidth: 2,
         tension: 0.4,
         pointRadius: 4,
@@ -121,30 +132,37 @@ const GoldChart = () => {
 
   const chartOptions = {
     responsive: true,
-    maintainAspectRatio: false, // Ensures the chart adapts within the div
+    maintainAspectRatio: false,
     plugins: {
-      legend: {
-        labels: {
-          color: "#fff", // Keep the legend labels white
-        },
-      },
+      legend: { display: false }, // No legend
     },
     scales: {
       x: {
+        title: {
+          display: true,
+          text: ["7d", "30d", "60d"].includes(selectedTimeframe) ? "Days" : "Months",
+          color: "#fff",
+          font: { size: 14, weight: "bold" },
+        },
         ticks: {
-          color: "#fff", // Set the x-axis label color to white
+          color: "#fff",
+          maxTicksLimit: selectedTimeframe === "1825d" ? 12 : selectedTimeframe === "365d" ? 6 : 5,
         },
       },
       y: {
-        ticks: {
-          color: "#fff", // Set the y-axis label color to white
+        title: {
+          display: true,
+          text: "$",
+          color: "#fff",
+          font: { size: 14, weight: "bold" },
         },
+        ticks: { color: "#fff" },
       },
     },
   };
 
   return (
-    <div className="bg-gray-800 rounded-lg p-6 shadow-xl mt-8 w-full max-w-7xl mx-auto"> {/* Increased width of the div */}
+    <div className="bg-gray-800 rounded-lg p-6 shadow-xl mt-8 mx-auto w-full max-w-7xl px-8 lg:px-12">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-white">Gold Price Chart</h2>
         <div className="flex gap-2">
@@ -163,7 +181,7 @@ const GoldChart = () => {
           ))}
         </div>
       </div>
-      <div className="relative h-[500px] w-full"> {/* Increased height for chart */}
+      <div className="relative h-[500px] w-full">
         <Line data={chartData} options={chartOptions} />
       </div>
     </div>
