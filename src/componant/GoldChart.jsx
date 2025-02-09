@@ -99,7 +99,7 @@ const GoldChart = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-yellow-400 border-t-transparent"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-400 border-t-transparent"></div>
       </div>
     );
   }
@@ -121,8 +121,8 @@ const GoldChart = () => {
       {
         data: filteredData.map((item) => item.close),
         fill: "start",
-        borderColor: "rgb(255, 215, 0)",
-        backgroundColor: "rgba(255, 215, 0, 0.2)",
+        borderColor: "rgb(0, 255, 0)",
+        backgroundColor: "rgba(0, 255, 0, 0.2)",
         borderWidth: 3,
         tension: 0.4,
         pointRadius: 3,
@@ -130,48 +130,17 @@ const GoldChart = () => {
     ],
   };
 
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: ["7d", "30d", "60d"].includes(selectedTimeframe) ? "Days" : "Months",
-          color: "#fff",
-          font: { size: 14, weight: "bold" },
-        },
-        ticks: {
-          color: "#fff",
-          maxTicksLimit: selectedTimeframe === "1825d" ? 12 : selectedTimeframe === "365d" ? 6 : 5,
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: "$",
-          color: "#fff",
-          font: { size: 14, weight: "bold" },
-        },
-        ticks: { color: "#fff" },
-      },
-    },
-  };
-
   return (
-    <div >
+    <div>
       <div className="flex flex-wrap items-center justify-between mb-6">
-        <h2 className="text-xl md:text-2xl font-bold text-white">Gold Price Chart</h2>
+        <h2 className="text-xl md:text-2xl font-bold   text-3xl font-bold text-yellow-400 ">Gold Price Chart</h2>
         <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
           {timeframes.map(({ label, value }) => (
             <button
               key={value}
               onClick={() => setSelectedTimeframe(value)}
               className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                selectedTimeframe === value ? "bg-yellow-500 text-gray-900" : "text-gray-400 hover:text-white hover:bg-gray-700"
+                selectedTimeframe === value ? "bg-green-500 text-white" : "text-gray-400 hover:text-white hover:bg-gray-700"
               }`}
             >
               {label}
@@ -180,7 +149,7 @@ const GoldChart = () => {
         </div>
       </div>
       <div className="relative h-72 sm:h-96 w-full">
-        <Line data={chartData} options={chartOptions} />
+        <Line data={chartData} options={{ responsive: true, maintainAspectRatio: false }} />
       </div>
     </div>
   );
