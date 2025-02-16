@@ -92,7 +92,7 @@ export default function GoldPriceDashboard() {
                 <th className="py-3 px-4 text-center">Recommendation</th>
               </tr>
             </thead>
-            <tbody>
+            {/* <tbody>
               {Object.entries(priceDifferences).map(([days, oldPrice]) => {
                 const diff = livePrice - oldPrice;
                 const percentageChange = ((diff / oldPrice) * 100).toFixed(2);
@@ -121,7 +121,51 @@ export default function GoldPriceDashboard() {
                   </tr>
                 );
               })}
-            </tbody>
+            </tbody> */}
+
+
+<tbody>
+  {Object.entries(priceDifferences).map(([days, oldPrice]) => {
+    const diff = livePrice - oldPrice;
+    const percentageChange = ((diff / oldPrice) * 100).toFixed(2);
+    let recommendationClass = "text-gray-300";
+    let recommendationText = "Hold";
+
+    if (percentageChange > 5) {
+      recommendationClass = "text-green-400";
+      recommendationText = "Buy";
+    } else if (percentageChange < -5) {
+      recommendationClass = "text-red-400";
+      recommendationText = "Sell";
+    }
+
+    // Label mapping
+    const labelMapping = {
+      7: "1 Week",
+      30: "1 Month",
+      60: "2 Months",
+      90: "3 Months",
+      180: "6 Months",
+      365: "1 Year",
+      1825: "5 Years",
+    };
+
+    return (
+      <tr key={days} className="border-b border-gray-700 hover:bg-gray-700 transition">
+        <td className="py-3 px-4 text-center">{labelMapping[days] || `${days} Days`}</td>
+        <td className="py-3 px-4 text-center">${oldPrice.toFixed(2)}</td>
+        <td className={`py-3 px-4 text-center ${diff >= 0 ? "text-green-400" : "text-red-400"}`}>
+          ${Math.abs(diff).toFixed(2)}
+        </td>
+        <td className={`py-3 px-4 text-center ${diff >= 0 ? "text-green-400" : "text-red-400"}`}>
+          {percentageChange}%
+        </td>
+        <td className={`py-3 px-4 text-center font-bold ${recommendationClass}`}>{recommendationText}</td>
+      </tr>
+    );
+  })}
+</tbody>
+
           </table>
         </div>
 
