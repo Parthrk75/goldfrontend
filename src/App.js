@@ -1,13 +1,17 @@
-import React from 'react';
-import './App.css';
-import GoldCard from './components/GoldCard'; // Corrected folder name
-import Navbar from './components/Navbar';
+import React from "react";
+import { Routes, Route } from "react-router-dom"; // ❌ Removed extra Router
+import { Helmet } from "react-helmet-async";
+import "./App.css";
+import GoldCard from "./components/GoldCard";
+import Navbar from "./components/Navbar";
+import Blog from "./components/Blog";
+import BlogDetail from "./components/BlogDetail";
 
 function App() {
   return (
     <div>
       {/* SEO Meta Tags */}
-      <head>
+      <Helmet>
         <title>Today Gold Prices - Live Gold Rate Updates</title>
         <meta name="description" content="Get the latest gold prices and market trends. Stay updated with live gold rates and historical data." />
         <meta name="keywords" content="gold price, live gold rate, gold market, gold trends, gold investment, gold updates" />
@@ -27,11 +31,16 @@ function App() {
         <meta name="twitter:title" content="Today Gold Prices - Live Gold Rate Updates" />
         <meta name="twitter:description" content="Stay updated with live gold rates and market trends. Check real-time gold price updates." />
         <meta name="twitter:image" content="https://www.todaygoldprices.org/twitter-image.jpg" />
-      </head>
+      </Helmet>
 
       {/* Website Content */}
       <Navbar />
-      <GoldCard /> 
+
+      <Routes>
+        <Route path="/" element={<GoldCard />} />
+        <Route path="/blog" element={<Blog />} /> {/* Blog Page Route */}
+        <Route path="/blog/:title" element={<BlogDetail />} />
+      </Routes>
     </div>
   );
 }

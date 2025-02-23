@@ -19,15 +19,41 @@ export default function Navbar() {
               </h1>
             </Link>
 
+            {/* Navigation Links */}
+            <div className="hidden md:flex space-x-6">
+              <Link
+                to="/blog"
+                className={`text-gray-400 hover:text-white transition-all duration-300 ${location.pathname === "/blog" ? "text-yellow-400 font-semibold" : ""}`}
+              >
+                Blog
+              </Link>
+            </div>
+
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"
+              aria-label="Toggle navigation menu"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-gray-900 border-t border-gray-700 py-4">
+            <div className="flex flex-col space-y-4 px-6">
+              <Link
+                to="/blog"
+                className={`text-gray-400 hover:text-white transition-all duration-300 ${location.pathname === "/blog" ? "text-yellow-400 font-semibold" : ""}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Blog
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
     </div>
   );
