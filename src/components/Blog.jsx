@@ -36,25 +36,25 @@ const Blog = () => {
         });
         return newIndexes;
       });
-    }, 5000); // Auto-slide every 5 seconds
+    }, 3000); // Auto-slide every 5 seconds
 
     return () => clearInterval(interval);
   }, [isAutoSliding]);
 
   return (
-    <section className="py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-4xl font-bold text-gray-900 leading-[3.25rem] mb-5">
+    <section className="py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             Our latest <span className="text-indigo-600">blogs</span>
           </h2>
-          <p className="text-gray-500 mb-6 max-w-2xl mx-auto">
+          <p className="text-gray-500 max-w-2xl mx-auto">
             Stay updated with the latest insights on gold trends, investment strategies, and market analysis.
           </p>
         </div>
 
         {/* Category Tabs */}
-        <div className="flex space-x-4 mb-6 justify-center">
+        <div className="flex flex-wrap gap-2 justify-center mb-6">
           <button
             className={`px-4 py-2 rounded-full font-semibold ${
               selectedCategory === "ALL" ? "bg-indigo-600 text-white" : "bg-gray-200"
@@ -85,21 +85,21 @@ const Blog = () => {
           return (
             <div
               key={index}
-              className="flex flex-col md:flex-row items-center justify-between mb-12 p-6 bg-gray-100 rounded-lg shadow-md"
+              className="flex flex-col lg:flex-row items-center justify-between mb-12 p-6 bg-gray-100 rounded-lg shadow-md w-full"
               onMouseEnter={() => setIsAutoSliding(false)}
               onMouseLeave={() => setIsAutoSliding(true)}
             >
-              <h3 className="text-3xl font-semibold text-gray-800 mb-6 md:mb-0 md:w-1/4">
+              <h3 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-4 lg:mb-0 lg:w-1/4 text-center lg:text-left">
                 {category.category}
               </h3>
-              <div className="md:w-3/4 bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+              <div className="lg:w-3/4 bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full">
                 <img
                   src={blog.image || "https://via.placeholder.com/600x400"}
                   alt={blog.title}
-                  className="rounded-lg w-full mb-4 object-cover"
+                  className="rounded-lg w-full h-48 object-cover sm:h-64 mb-4"
                   loading="lazy"
                 />
-                <h4 className="text-xl text-gray-900 font-medium mb-2">
+                <h4 className="text-lg sm:text-xl text-gray-900 font-medium mb-2">
                   {blog.title}
                 </h4>
                 <p className="text-gray-500 mb-4">
