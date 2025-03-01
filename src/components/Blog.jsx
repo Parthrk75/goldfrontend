@@ -50,30 +50,29 @@ const Blog = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {category.topics.map((blog, index) => {
-                  // Ensure blog.image exists before calling startsWith
-                  const imageUrl = blog.image
-                    ? (blog.image.startsWith("/") ? blog.image : `/image/${blog.image}`)
-                    : "https://via.placeholder.com/600x400"; // Fallback image
+                  const imageUrl = blog.image?.startsWith("/")
+                    ? blog.image
+                    : blog.image
+                    ? `/image/${blog.image}`
+                    : "https://via.placeholder.com/600x400";
 
                   return (
                     <div
                       key={`${category.category}-${index}`}
                       className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
                     >
-                      <img
-                        src={imageUrl}
-                        alt={blog.title}
-                        className="w-full h-48 object-cover rounded-t-2xl"
-                        loading="lazy"
-                      />
+                      <div className="w-full h-56 overflow-hidden flex justify-center items-center bg-gray-200">
+                        <img
+                          src={imageUrl}
+                          alt={blog.title}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
                       <div className="p-6">
-                        <h4 className="text-lg sm:text-xl text-gray-900 font-semibold mb-2">
-                          {blog.title}
-                        </h4>
+                        <h4 className="text-lg sm:text-xl text-gray-900 font-semibold mb-2">{blog.title}</h4>
                         <p className="text-gray-500 mb-4">
-                          {blog.description.length > 100
-                            ? blog.description.substring(0, 100) + "..."
-                            : blog.description}
+                          {blog.description.length > 100 ? blog.description.substring(0, 100) + "..." : blog.description}
                         </p>
                         <Link
                           to={`/blog/${blog.title.replace(/\s+/g, "-").toLowerCase()}`}
